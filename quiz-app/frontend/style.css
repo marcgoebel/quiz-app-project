@@ -1,4 +1,4 @@
-/* Global centering and alignment styles */
+/* Globale Zentrierung und Ausrichtung */
 body {
   display: flex;
   flex-direction: column;
@@ -8,7 +8,7 @@ body {
   padding: 0;
 }
 
-/* Application header - consistent centering */
+/* App-Header - konsistente Zentrierung */
 #application-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -18,7 +18,7 @@ body {
   margin: 0 auto;
 }
 
-/* All main screen containers - consistent centering */
+/* Alle Hauptbildschirm-Container - konsistente Zentrierung */
 #user-login-screen,
 #main-menu,
 #quiz-room,
@@ -37,7 +37,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Ensure screens are visible when not hidden */
+/* Bildschirme sichtbar wenn nicht versteckt */
 #user-login-screen:not(.hidden),
 #main-menu:not(.hidden),
 #quiz-room:not(.hidden),
@@ -49,7 +49,7 @@ body {
   display: flex;
 }
 
-/* Content containers - consistent max-width and centering */
+/* Content-Container - konsistente max-width und Zentrierung */
 #user-login-screen > div,
 #main-menu > div,
 #quiz-room > div,
@@ -62,7 +62,7 @@ body {
   width: 100%;
 }
 
-/* Specific adjustments for better alignment */
+/* Spezifische Anpassungen für bessere Ausrichtung */
 #user-login-screen {
   margin-top: 2rem;
 }
@@ -73,28 +73,28 @@ body {
   object-fit: contain;
 }
 
-/* Ensure tables are centered */
+/* Tabellen zentriert */
 #highscore-table {
   margin: 0 auto;
 }
 
-/* Achievement grid centering */
+/* Achievement-Raster Zentrierung */
 .grid {
   justify-items: center;
 }
 
-/* Chat history alignment fix */
+/* Chat-Verlauf Ausrichtung */
 #chat-history {
   text-align: left;
 }
 
-/* Button groups centering */
+/* Button-Gruppen Zentrierung */
 .flex.gap-2,
 .flex.gap-4 {
   justify-content: center;
 }
 
-/* Responsive adjustments */
+/* Responsive Anpassungen */
 @media (max-width: 768px) {
   #user-login-screen,
   #main-menu,

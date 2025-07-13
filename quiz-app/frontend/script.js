@@ -12,42 +12,26 @@ let unlockedAchievements = []
 let availableCategories = []
 
 /**
- * Shows a specific screen and hides all others
- * @param {string} id - The ID of the screen to show
- * @description Hides all screens and shows only the screen with the given ID
+ * Zeigt einen bestimmten Bildschirm an und versteckt alle anderen
+ * @param {string} id - Die ID des anzuzeigenden Bildschirms
  */
 function showScreen(id) {
-  console.log("Showing screen:", id);
   const screens = ["user-login-screen", "main-menu", "highscore-screen", "editor-screen", "quiz-screen", "quiz-room", "result-screen", "achievements-screen"];
   
-  // First, set display style for all screens
+  // Alle Bildschirme ausblenden
   screens.forEach(s => {
     const element = document.getElementById(s);
-    if (element) {
-      if (s !== id) {
-        console.log("Hiding screen:", s);
-        // First set display style to none
-        element.style.display = "none";
-        // Then add hidden class
-        element.classList.add("hidden");
-      }
-    } else {
-      console.error("Screen element not found:", s);
+    if (element && s !== id) {
+      element.style.display = "none";
+      element.classList.add("hidden");
     }
   });
   
-  // Then show the target screen
+  // Ziel-Bildschirm anzeigen
   const screenToShow = document.getElementById(id);
   if (screenToShow) {
-    console.log("Found screen to show:", id);
-    // First remove hidden class
     screenToShow.classList.remove("hidden");
-    // Then set display style
     screenToShow.style.display = id === "quiz-room" || id === "main-menu" ? "flex" : "block";
-    console.log("Screen display style set to:", screenToShow.style.display);
-    console.log("Screen hidden class removed:", !screenToShow.classList.contains("hidden"));
-  } else {
-    console.error("Screen to show not found:", id);
   }
   
   // Load categories when showing main menu or editor
@@ -62,42 +46,38 @@ function showScreen(id) {
 }
 
 /**
- * Loads available categories from the backend and updates dropdowns
+ * Lädt verfügbare Kategorien vom Backend und aktualisiert Dropdowns
  */
 async function loadCategories() {
   try {
-    const response = await fetch(`${api}/categories`);
+    const response = await fetch(`${API_BASE}/categories`);
     if (response.ok) {
       availableCategories = await response.json();
       updateCategoryDropdowns();
-    } else {
-      console.error('Failed to load categories');
     }
   } catch (error) {
-    console.error('Error loading categories:', error);
+    // Fehler beim Laden der Kategorien
   }
 }
 
 /**
- * Updates category dropdown options in both main menu and editor
+ * Aktualisiert Kategorie-Dropdown-Optionen im Hauptmenü und Editor
  */
 function updateCategoryDropdowns() {
   const startCategorySelect = document.getElementById('start-category');
   const editorCategorySelect = document.getElementById('category');
   
-  // Clear existing options (except "all" for start category)
+  // Bestehende Optionen löschen
   startCategorySelect.innerHTML = '<option value="all">Alle Kategorien</option>';
   editorCategorySelect.innerHTML = '';
   
-  // Add categories to both dropdowns
+  // Kategorien zu beiden Dropdowns hinzufügen
   availableCategories.forEach(category => {
-    // Add to start category dropdown
     const startOption = document.createElement('option');
     startOption.value = category;
     startOption.textContent = getCategoryDisplayName(category);
     startCategorySelect.appendChild(startOption);
     
-    // Add to editor category dropdown
     const editorOption = document.createElement('option');
     editorOption.value = category;
     editorOption.textContent = getCategoryDisplayName(category);
@@ -106,9 +86,9 @@ function updateCategoryDropdowns() {
 }
 
 /**
- * Returns a user-friendly display name for a category
- * @param {string} category - The category key
- * @returns {string} - The display name
+ * Gibt einen benutzerfreundlichen Anzeigenamen für eine Kategorie zurück
+ * @param {string} category - Der Kategorie-Schlüssel
+ * @returns {string} - Der Anzeigename
  */
 function getCategoryDisplayName(category) {
   const categoryNames = {
@@ -128,9 +108,7 @@ function getCategoryDisplayName(category) {
 }
 
 /**
- * Handles user login process
- * @description Validates the username input, stores it in local storage, transitions from login screen 
- * to main menu, and initializes the application with achievements display
+ * Verarbeitet den Benutzer-Anmeldeprozess
  */
 async function login() {
   const username = document.getElementById("username-input").value.trim();
@@ -144,61 +122,47 @@ async function login() {
   }
 
   try {
-    // Send login request to backend
-    const response = await fetch(`${api}/login`, {
+    // Anmeldeanfrage an Backend senden
+    const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
     });
 
     if (response.ok) {
-      // Store username in local storage for persistence
+      // Benutzername im lokalen Speicher ablegen
       localStorage.setItem("username", username);
       
-      // Hide error message
       errorEl.classList.add("hidden");
-      
-      // Show main menu using the showScreen function
       showScreen("main-menu");
       
-      // Initialize app and show achievements
       initializeApp();
       showAchievements();
     } else {
-      // Show error message
       errorEl.textContent = "❌ Ungültige Anmeldedaten";
       errorEl.classList.remove("hidden");
     }
   } catch (error) {
-    console.error("Login error:", error);
     errorEl.textContent = "❌ Verbindungsfehler. Bitte versuchen Sie es später erneut.";
     errorEl.classList.remove("hidden");
   }
 }
 
 /**
- * Initializes the application after successful login
- * @description Sets up event listeners for game mode selection and performs initial UI setup:
- * 1. Adds change event listener to mode selection dropdown
- * 2. Performs initial check of selected mode availability
- * 3. Displays the achievements panel if hidden
+ * Initialisiert die Anwendung nach erfolgreicher Anmeldung
  */
 function initializeApp() {
-  // Set up mode selection dropdown event listener
   const modeSelect = document.getElementById("mode-select");
   if (modeSelect) {
     modeSelect.addEventListener("change", checkModeAvailability);
-    // Perform initial check of selected mode
     checkModeAvailability();
   }
-  
-  // Achievements are now on a separate page
 }
 
-const api = "http://localhost:8001"
+const API_BASE = "https://quiz-app-project-0k81.onrender.com"
 
 /**
- * Toggles the visibility of the PDF upload section
+ * Schaltet die Sichtbarkeit des PDF-Upload-Bereichs um
  */
 function togglePdfSection() {
   const pdfSection = document.getElementById('pdf-section');
@@ -210,11 +174,7 @@ function togglePdfSection() {
 }
 
 /**
- * Checks if the selected game mode is available
- * @description Evaluates the currently selected game mode and:
- * 1. Displays appropriate notification messages for unavailable modes
- * 2. Disables/enables the start button based on mode availability
- * 3. Updates UI styling to reflect the current state
+ * Überprüft die Verfügbarkeit des gewählten Spielmodus
  */
 function checkModeAvailability() {
     const mode = document.getElementById("mode-select").value;
@@ -247,10 +207,8 @@ function checkModeAvailability() {
 }
 
 /**
- * Creates a message element for displaying mode availability information
- * @description Dynamically creates and inserts a notification element for displaying
- * mode availability messages to the user
- * @returns {HTMLElement} The created message element
+ * Erstellt ein Nachrichtenelement für Spielmodus-Verfügbarkeitsinformationen
+ * @returns {HTMLElement} Das erstellte Nachrichtenelement
  */
 function createModeMessageElement() {
     const container = document.querySelector(".bg-white.p-6.rounded-2xl");
@@ -265,48 +223,39 @@ function createModeMessageElement() {
 }
 
 /**
- * Applies mode-specific settings and modifications
- * @param {string} mode - The selected game mode
+ * Wendet modusspezifische Einstellungen und Änderungen an
+ * @param {string} mode - Der gewählte Spielmodus
  */
 function applyModeSettings(mode) {
     switch(mode) {
         case "team":
-            // Team mode: Add team elements and 2v2 logic
             addTeamModeElements();
             break;
         case "expert":
-            // Expert mode: Add timer and harder questions
             addExpertModeElements();
             break;
         case "learn":
-            // Learn mode: Add explanations and retry options
             addLearnModeElements();
             break;
         default:
-            // Classic mode: default behavior
             break;
     }
 }
 
 /**
- * Adds team mode specific elements
+ * Fügt Team-Modus-spezifische Elemente hinzu
  */
 function addTeamModeElements() {
-    // Add team score display
     const scoreText = document.getElementById("score-text");
     if (scoreText) {
         scoreText.innerHTML = `Team 1: ${playerScore} | Team 2: ${botScore}`;
     }
-    
-    // Show team battle indicator
-    console.log("🏆 Team-Modus aktiviert: 2v2 Battle!");
 }
 
 /**
- * Adds expert mode specific elements
+ * Fügt Experten-Modus-spezifische Elemente hinzu
  */
 function addExpertModeElements() {
-    // Add timer element
     const quizScreen = document.getElementById("quiz-screen");
     if (quizScreen && !document.getElementById("expert-timer")) {
         const timerDiv = document.createElement("div");
@@ -315,12 +264,10 @@ function addExpertModeElements() {
         timerDiv.innerHTML = "⏰ Zeit: <span id='timer-display'>30</span>s";
         quizScreen.insertBefore(timerDiv, quizScreen.firstChild);
     }
-    
-    console.log("🎓 Experten-Modus aktiviert: Zeitlimit und schwierigere Fragen!");
 }
 
 /**
- * Adds learn mode specific elements
+ * Fügt Lern-Modus-spezifische Elemente hinzu
  */
 function addLearnModeElements() {
     // Add explanation area
@@ -339,12 +286,12 @@ function addLearnModeElements() {
         quizScreen.appendChild(explanationDiv);
     }
     
-    console.log("📘 Lernmodus aktiviert: Erklärungen und Wiederholungen!");
+
 }
 
 /**
- * Show explanation in learn mode
- * @param {Object} question - The current question object
+ * Zeigt Erklärung im Lernmodus an
+ * @param {Object} question - Das aktuelle Fragen-Objekt
  */
 function showLearnModeExplanation(question) {
     const explanationDiv = document.getElementById("learn-explanation");
@@ -386,7 +333,7 @@ function showLearnModeExplanation(question) {
 }
 
 /**
- * Retry the current question in learn mode
+ * Wiederholt die aktuelle Frage im Lernmodus
  */
 function retryQuestion() {
     const explanationDiv = document.getElementById("learn-explanation");
@@ -402,11 +349,10 @@ function retryQuestion() {
     });
     
     document.getElementById("feedback").innerText = "";
-    console.log("🔄 Frage wird wiederholt...");
 }
 
 /**
- * Start expert mode timer
+ * Startet den Experten-Modus-Timer
  */
 let expertTimer = null;
 function startExpertTimer() {
@@ -423,9 +369,9 @@ function startExpertTimer() {
         
         if (timeLeft <= 0) {
             clearInterval(expertTimer);
-            // Auto-submit wrong answer when time runs out
+            // Automatische Antwort bei Zeitablauf
             if (selected === -1) {
-                selected = -1; // Mark as no selection
+                selected = -1;
                 submitAnswer();
             }
         }
@@ -433,7 +379,7 @@ function startExpertTimer() {
 }
 
 /**
- * Stop expert mode timer
+ * Stoppt den Experten-Modus-Timer
  */
 function stopExpertTimer() {
     if (expertTimer) {
@@ -451,23 +397,19 @@ async function startQuiz() {
     console.log("Starting quiz with category:", category, "and mode:", mode);
     
     // All modes are now supported!
-    console.log("Mode selected:", mode);
-
     try {
-        console.log("Fetching questions from API...");
-        const res = await fetch(`${api}/start-quiz`, {
+        const res = await fetch(`${API_BASE}/start-quiz`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ category, mode })
         })
 
         const data = await res.json()
-        console.log("API response:", data);
 
         if (data.error) {
             let errorMessage = "❌ " + data.error;
             
-            // Handle category-specific error messages
+            // Kategorie-spezifische Fehlermeldungen
             if (res.status === 404) {
                 const categoryName = getCategoryDisplayName(category);
                 if (category === "all") {
@@ -489,58 +431,39 @@ async function startQuiz() {
         botScore = 0
         streakCounter = 0
 
-        console.log("Questions loaded:", questions);
-        
-        // Apply mode-specific modifications
         applyModeSettings(mode);
-        
-        // Show quiz screen and question immediately
         showScreen("quiz-screen")
         showQuestion();
         
     } catch (error) {
-        console.error("Error in startQuiz:", error);
         alert("❌ Netzwerkfehler beim Starten des Quiz. Bitte überprüfe deine Internetverbindung.");
     }
 }
 
 /**
- * Displays the current question and answer options
- * @description Updates the UI to show the current question, clears any previous feedback,
- * updates the score display, and renders the answer options as clickable buttons
+ * Zeigt die aktuelle Frage und Antwortoptionen an
  */
 function showQuestion() {
-    console.log("showQuestion called. Current question index:", current);
-    console.log("Questions array:", questions);
-    
-    // Always ensure quiz-screen is visible first
     showScreen("quiz-screen");
     
     if (!questions || questions.length === 0) {
-        console.error("No questions available!");
         document.getElementById("question-text").innerText = "Fehler: Keine Fragen verfügbar";
         return;
     }
     
     const q = questions[current];
-    console.log("Current question object:", q);
     
     if (!q) {
-        console.error("Current question is undefined!");
         document.getElementById("question-text").innerText = "Fehler: Frage nicht gefunden";
         return;
     }
     
-    // Check if question-text element exists
     const questionTextEl = document.getElementById("question-text");
-    console.log("Question text element:", questionTextEl);
     if (!questionTextEl) {
-        console.error("question-text element not found!");
         return;
     }
     
     questionTextEl.innerText = q.question;
-    console.log("Set question text to:", q.question);
     
     document.getElementById("feedback").innerText = "";
     document.getElementById("score-text").innerText = `Du: ${playerScore} | Max: ${botScore}`;
@@ -549,19 +472,15 @@ function showQuestion() {
     document.getElementById("progress-bar").style.width = progress + "%";
 
     const container = document.getElementById("options");
-    console.log("Options container:", container);
     if (!container) {
-        console.error("options container element not found!");
         return;
     }
     container.innerHTML = "";
 
     if (!q.options || !Array.isArray(q.options)) {
-        console.error("Question options are not an array!", q.options);
         return;
     }
     
-    console.log("Creating option buttons for", q.options.length, "options");
     q.options.forEach((opt, i) => {
         const btn = document.createElement("button");
         btn.innerText = opt;
@@ -575,10 +494,9 @@ function showQuestion() {
             btn.classList.add("ring", "ring-blue-400");
         };
         container.appendChild(btn);
-        console.log("Added option button:", opt);
     });
     
-    // Show bot thinking indicators only in multiplayer mode
+    // Bot-Denkanzeigen nur im Multiplayer-Modus
     if (currentMode === "multiplayer") {
         const maxIndicator = document.getElementById("max-indicator")
         const annaIndicator = document.getElementById("anna-indicator")
@@ -606,39 +524,30 @@ function showQuestion() {
         }
     }
     
-    // Start expert mode timer
+    // Experten-Modus Timer starten
     if (currentMode === "expert") {
         startExpertTimer();
     }
     
-    // Update score display for team mode
+    // Punkteanzeige für Team-Modus aktualisieren
     if (currentMode === "team") {
         document.getElementById("score-text").innerHTML = `Team 1: ${playerScore} | Team 2: ${botScore}`;
     }
-    
-    console.log("Question display complete");
 }
 
 /**
- * Processes the user's answer submission
- * @description Handles the answer submission process by:
- * 1. Validating that an answer is selected
- * 2. Sending the selection to the API
- * 3. Updating the UI to show correct/incorrect answers
- * 4. Updating scores and displaying feedback
- * 5. Checking for achievements
- * 6. Moving to the next question or results screen
+ * Verarbeitet die Antwortabgabe des Benutzers
  */
 async function submitAnswer() {
     if (selected === -1) return alert("Bitte wähle eine Antwort.")
     const q = questions[current]
     
-    // Stop expert mode timer
+    // Experten-Modus Timer stoppen
     if (currentMode === "expert") {
         stopExpertTimer();
     }
 
-    const res = await fetch(`${api}/submit-answer`, {
+    const res = await fetch(`${API_BASE}/submit-answer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -651,14 +560,14 @@ async function submitAnswer() {
     const data = await res.json()
     const optionButtons = document.querySelectorAll("#options button")
     
-    // Learn mode: Show explanation
+    // Lern-Modus: Erklärung anzeigen
     if (currentMode === "learn" && !data.player_correct) {
         showLearnModeExplanation(q);
-        return; // Don't proceed to next question yet
+        return;
     }
     
     if (currentMode === "multiplayer") {
-        // 2v2 Team Mode Logic
+        // 2v2 Team-Modus Logik
         const maxSelected = Math.floor(Math.random() * q.options.length)
         const annaSelected = Math.floor(Math.random() * q.options.length)
         const tomSelected = Math.floor(Math.random() * q.options.length)
@@ -726,7 +635,7 @@ async function submitAnswer() {
             `
         }
     } else {
-        // Standard 1v1 Bot Mode Logic
+        // Standard 1v1 Bot-Modus Logik
         playerScore = data.player_score
         botScore = data.bot_score
         
@@ -796,21 +705,16 @@ async function submitAnswer() {
 }
 
 /**
- * Shows the question editor screen
- * @description Uses the showScreen function to display the editor screen
- * where users can add new questions to the quiz database.
+ * Zeigt den Frageneditor-Bildschirm an
  */
 function showEditor() {
     showScreen("editor-screen")
     
-    // Load categories for dropdown
     loadCategories();
-    
-    // Switch to create tab by default
     switchEditorTab('create');
 }
 
-// Tab switching function
+// Tab-Wechsel-Funktion
 function switchEditorTab(tab) {
     const createTab = document.getElementById('create-tab');
     const manageTab = document.getElementById('manage-tab');
@@ -828,16 +732,16 @@ function switchEditorTab(tab) {
         manageSection.classList.remove('hidden');
         createSection.classList.add('hidden');
         
-        // Load questions list and categories for filter
+        // Fragenliste und Kategorien für Filter laden
         loadCategoriesForFilter();
         loadQuestionsList();
     }
 }
 
-// Load categories for filter dropdown
+// Kategorien für Filter-Dropdown laden
 async function loadCategoriesForFilter() {
     try {
-        const res = await fetch(`${api}/categories`);
+        const res = await fetch(`${API_BASE}/categories`);
         const categories = await res.json();
         
         const filterSelect = document.getElementById('filter-category');
@@ -850,17 +754,17 @@ async function loadCategoriesForFilter() {
             filterSelect.appendChild(option);
         });
     } catch (error) {
-        console.error('Error loading categories for filter:', error);
+        // Fehler beim Laden der Kategorien
     }
 }
 
-// Load and display questions list
+// Fragenliste laden und anzeigen
 async function loadQuestionsList() {
     try {
         const filterCategory = document.getElementById('filter-category').value;
         const endpoint = filterCategory === 'all' ? '/questions' : `/questions/${filterCategory}`;
         
-        const res = await fetch(`${api}${endpoint}`);
+        const res = await fetch(`${API_BASE}${endpoint}`);
         const questions = await res.json();
         
         const questionsList = document.getElementById('questions-list');
@@ -902,20 +806,18 @@ async function loadQuestionsList() {
         });
         
     } catch (error) {
-         console.error('Error loading questions:', error);
          document.getElementById('manage-feedback').textContent = '❌ Fehler beim Laden der Fragen.';
          document.getElementById('manage-feedback').className = 'mt-4 text-center text-red-600';
      }
  }
 
-// Global variable to store the question being edited
+// Globale Variable für die zu bearbeitende Frage
 let currentEditingQuestion = null;
 
-// Edit question function
+// Frage bearbeiten
 async function editQuestion(questionId) {
     try {
-        // Find the question in the current questions list
-        const res = await fetch(`${api}/questions`);
+        const res = await fetch(`${API_BASE}/questions`);
         const allQuestions = await res.json();
         const question = allQuestions.find(q => q.id === questionId);
         
@@ -926,14 +828,13 @@ async function editQuestion(questionId) {
         
         currentEditingQuestion = question;
         
-        // Populate the edit modal
+        // Bearbeitungsmodal befüllen
         document.getElementById('edit-question').value = question.question;
         
-        // Load categories for edit dropdown
         await loadCategoriesForEdit();
         document.getElementById('edit-category').value = question.category;
         
-        // Populate options
+        // Optionen befüllen
         const optionsContainer = document.getElementById('edit-options-container');
         optionsContainer.innerHTML = '';
         
@@ -946,22 +847,20 @@ async function editQuestion(questionId) {
             optionsContainer.appendChild(optionDiv);
         });
         
-        // Update correct answer dropdown
+        // Richtige Antwort Dropdown aktualisieren
         updateEditCorrectAnswerDropdown(question.options.length, question.correct);
         
-        // Show the modal
         document.getElementById('edit-modal').classList.remove('hidden');
         
     } catch (error) {
-        console.error('Error loading question for edit:', error);
         alert('Fehler beim Laden der Frage!');
     }
 }
 
-// Load categories for edit dropdown
+// Kategorien für Bearbeitungs-Dropdown laden
 async function loadCategoriesForEdit() {
     try {
-        const res = await fetch(`${api}/categories`);
+        const res = await fetch(`${API_BASE}/categories`);
         const categories = await res.json();
         
         const editCategorySelect = document.getElementById('edit-category');
@@ -974,11 +873,11 @@ async function loadCategoriesForEdit() {
             editCategorySelect.appendChild(option);
         });
     } catch (error) {
-        console.error('Error loading categories for edit:', error);
+        // Fehler beim Laden der Kategorien
     }
 }
 
-// Update correct answer dropdown for edit modal
+// Richtige Antwort Dropdown für Bearbeitungsmodal aktualisieren
 function updateEditCorrectAnswerDropdown(optionCount, selectedCorrect) {
     const correctSelect = document.getElementById('edit-correct');
     correctSelect.innerHTML = '';
@@ -993,14 +892,14 @@ function updateEditCorrectAnswerDropdown(optionCount, selectedCorrect) {
     correctSelect.value = selectedCorrect;
 }
 
-// Close edit modal
+// Bearbeitungsmodal schließen
 function closeEditModal() {
     document.getElementById('edit-modal').classList.add('hidden');
     document.getElementById('edit-feedback').textContent = '';
     currentEditingQuestion = null;
 }
 
-// Save edited question
+// Bearbeitete Frage speichern
 async function saveEditedQuestion() {
     if (!currentEditingQuestion) {
         alert('Keine Frage zum Bearbeiten ausgewählt!');
@@ -1011,7 +910,7 @@ async function saveEditedQuestion() {
     const category = document.getElementById('edit-category').value;
     const correct = parseInt(document.getElementById('edit-correct').value);
     
-    // Collect options
+    // Optionen sammeln
     const options = [];
     const optionInputs = document.querySelectorAll('#edit-options-container input');
     optionInputs.forEach(input => {
@@ -1021,7 +920,7 @@ async function saveEditedQuestion() {
         }
     });
     
-    // Validation
+    // Validierung
     if (!question) {
         document.getElementById('edit-feedback').textContent = '❌ Bitte geben Sie eine Frage ein.';
         document.getElementById('edit-feedback').className = 'mt-4 text-center text-red-600';
@@ -1041,7 +940,7 @@ async function saveEditedQuestion() {
     }
     
     try {
-        const res = await fetch(`${api}/edit-question/${currentEditingQuestion.id}`, {
+        const res = await fetch(`${API_BASE}/edit-question/${currentEditingQuestion.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question, options, correct, category })
@@ -1053,10 +952,9 @@ async function saveEditedQuestion() {
             document.getElementById('edit-feedback').textContent = '✅ Frage erfolgreich bearbeitet!';
             document.getElementById('edit-feedback').className = 'mt-4 text-center text-green-600';
             
-            // Reload questions list
+            // Fragenliste neu laden
             loadQuestionsList();
             
-            // Close modal after a short delay
             setTimeout(() => {
                 closeEditModal();
             }, 1500);
@@ -1067,18 +965,18 @@ async function saveEditedQuestion() {
     } catch (error) {
         document.getElementById('edit-feedback').textContent = '❌ Verbindungsfehler. Bitte versuchen Sie es erneut.';
         document.getElementById('edit-feedback').className = 'mt-4 text-center text-red-600';
-        console.error('Error editing question:', error);
+
     }
 }
 
-// Delete question function
+// Frage löschen
 async function deleteQuestion(questionId) {
     if (!confirm('Sind Sie sicher, dass Sie diese Frage löschen möchten?')) {
         return;
     }
     
     try {
-        const res = await fetch(`${api}/delete-question/${questionId}`, {
+        const res = await fetch(`${API_BASE}/delete-question/${questionId}`, {
             method: 'DELETE'
         });
         
@@ -1088,10 +986,9 @@ async function deleteQuestion(questionId) {
             document.getElementById('manage-feedback').textContent = '✅ Frage erfolgreich gelöscht!';
             document.getElementById('manage-feedback').className = 'mt-4 text-center text-green-600';
             
-            // Reload questions list
+            // Fragenliste neu laden
             loadQuestionsList();
             
-            // Clear feedback after a delay
             setTimeout(() => {
                 document.getElementById('manage-feedback').textContent = '';
             }, 3000);
@@ -1102,15 +999,12 @@ async function deleteQuestion(questionId) {
     } catch (error) {
         document.getElementById('manage-feedback').textContent = '❌ Verbindungsfehler. Bitte versuchen Sie es erneut.';
         document.getElementById('manage-feedback').className = 'mt-4 text-center text-red-600';
-        console.error('Error deleting question:', error);
+
     }
 }
 
 /**
- * Adds a new question to the quiz database
- * @description Collects question data from the editor form, including the question text,
- * answer options, correct answer index, and category, then sends it to the backend API.
- * Displays feedback about the success or failure of the operation.
+ * Fügt eine neue Frage zur Quiz-Datenbank hinzu
  */
 let optionCount = 3;
 
@@ -1127,7 +1021,7 @@ function addOption() {
     `;
     container.appendChild(newOption);
     
-    // Update correct answer dropdown
+    // Richtige Antwort Dropdown aktualisieren
     updateCorrectAnswerDropdown();
 }
 
@@ -1140,7 +1034,7 @@ function removeOption(button, optionNum) {
     button.parentElement.remove();
     optionCount--;
     
-    // Renumber remaining options
+    // Verbleibende Optionen neu nummerieren
     const container = document.getElementById("options-container");
     const inputs = container.querySelectorAll("input[type='text']");
     inputs.forEach((input, index) => {
@@ -1164,7 +1058,7 @@ function updateCorrectAnswerDropdown() {
         correctSelect.appendChild(option);
     }
     
-    // Restore previous selection if still valid
+    // Vorherige Auswahl wiederherstellen falls gültig
     if (currentValue < optionCount) {
         correctSelect.value = currentValue;
     }
@@ -1174,7 +1068,7 @@ function clearQuestionForm() {
     document.getElementById("new-question").value = "";
     document.getElementById("category").value = "math";
     
-    // Reset to 3 options
+    // Auf 3 Optionen zurücksetzen
     const container = document.getElementById("options-container");
     container.innerHTML = `
         <input type="text" id="opt1" class="w-full p-2 border rounded mb-2" placeholder="Antwort 1" />
@@ -1191,7 +1085,7 @@ function clearQuestionForm() {
 async function addQuestion() {
     const question = document.getElementById("new-question").value.trim();
     
-    // Collect all options
+    // Alle Optionen sammeln
     const options = [];
     for (let i = 1; i <= optionCount; i++) {
         const optValue = document.getElementById(`opt${i}`).value.trim();
@@ -1203,7 +1097,7 @@ async function addQuestion() {
     const correct = parseInt(document.getElementById("correct").value);
     const category = document.getElementById("category").value;
     
-    // Validation
+    // Validierung
     if (!question) {
         document.getElementById("editor-feedback").textContent = "❌ Bitte geben Sie eine Frage ein.";
         document.getElementById("editor-feedback").className = "mt-4 text-center text-red-600";
@@ -1223,7 +1117,7 @@ async function addQuestion() {
     }
 
     try {
-        const res = await fetch(`${api}/add-question`, {
+        const res = await fetch(`${API_BASE}/add-question`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ question, options, correct, category })
@@ -1235,7 +1129,7 @@ async function addQuestion() {
             document.getElementById("editor-feedback").textContent = "✅ Frage erfolgreich gespeichert!";
             document.getElementById("editor-feedback").className = "mt-4 text-center text-green-600";
             
-            // Clear form after successful submission
+            // Formular nach erfolgreichem Speichern leeren
             clearQuestionForm();
         } else {
             document.getElementById("editor-feedback").textContent = `❌ ${data.detail || 'Fehler beim Speichern der Frage'}`;
@@ -1244,24 +1138,22 @@ async function addQuestion() {
     } catch (error) {
         document.getElementById("editor-feedback").textContent = "❌ Verbindungsfehler. Bitte versuchen Sie es erneut.";
         document.getElementById("editor-feedback").className = "mt-4 text-center text-red-600";
-        console.error('Error adding question:', error);
+
      }
  }
 
 /**
- * Saves the quiz results to the highscore list in local storage
- * @description Creates a new highscore entry with the current date, category, mode,
- * player and bot scores, and the result (win/loss/draw), then saves it to localStorage
- * @param {string} category - The quiz category
- * @param {string} mode - The game mode that was played
- * @param {number} player - The player's final score
- * @param {number} bot - The bot's final score
-  */
+ * Speichert die Quiz-Ergebnisse in der Highscore-Liste im lokalen Speicher
+ * @param {string} category - Die Quiz-Kategorie
+ * @param {string} mode - Der gespielte Spielmodus
+ * @param {number} player - Die Endpunktzahl des Spielers
+ * @param {number} bot - Die Endpunktzahl des Bots
+ */
 function saveHighscore(category, mode, player, bot) {
-    // Determine the result based on score comparison
+    // Ergebnis basierend auf Punktevergleich bestimmen
     const result = player > bot ? "Sieg gegen Max" : player < bot ? "Niederlage gegen Max" : "Unentschieden mit Max"
     
-    // Create the score object with all relevant information
+    // Score-Objekt mit allen relevanten Informationen erstellen
     const score = {
         date: new Date().toLocaleString(),
         category: category || "Alle",
@@ -1277,10 +1169,7 @@ function saveHighscore(category, mode, player, bot) {
 }
 
 /**
- * Displays the highscore screen with saved quiz results
- * @description Uses the showScreen function to display the highscore screen,
- * loads saved highscores from local storage, and populates the highscore table
- * with date, category, mode, player score, bot score, and result for each entry.
+ * Zeigt den Highscore-Bildschirm mit gespeicherten Quiz-Ergebnissen an
  */
 function showHighscores() {
     showScreen("highscore-screen")
@@ -1288,7 +1177,7 @@ function showHighscores() {
     const data = JSON.parse(localStorage.getItem("highscores") || "[]")
     const table = document.getElementById("highscore-table")
 
-    // lösche alle Zeilen außer Kopfzeile
+    // Alle Zeilen außer Kopfzeile löschen
     while (table.rows.length > 1) table.deleteRow(1)
 
     data.forEach(entry => {
@@ -1303,19 +1192,14 @@ function showHighscores() {
 }
 
 /**
- * Navigates back to the main menu from the highscore screen
- * @description Uses the showScreen function to display the main menu,
- * allowing the user to return to the main application flow.
+ * Navigiert zurück zum Hauptmenü vom Highscore-Bildschirm
  */
 function goToLogin() {
     showScreen("main-menu")
 }
 
 /**
- * Handles PDF upload for question generation
- * @description DUMMY IMPLEMENTATION: This function simulates PDF upload and processing.
- * It shows success messages regardless of backend response and generates dummy questions
- * based on the selected module.
+ * Behandelt PDF-Upload für Fragengenerierung
  */
 async function uploadPdf() {
   const fileInput = document.getElementById("pdf-upload")
@@ -1338,36 +1222,29 @@ async function uploadPdf() {
   formData.append("module", selectedModule)
 
   try {
-    const res = await fetch(`${api}/upload-pdf`, {
+    const res = await fetch(`${API_BASE}/upload-pdf`, {
       method: "POST",
       body: formData
     })
 
-    // Even if the response is not OK, we'll show a success message
+    // Auch bei fehlerhafter Antwort Erfolgsmeldung anzeigen
     feedback.textContent = `✅ PDF für Modul "${moduleSelect.options[moduleSelect.selectedIndex].text}" erfolgreich verarbeitet. Fragen wurden generiert.`
     
-    // Generate dummy questions regardless of backend response
+    // Dummy-Fragen unabhängig von Backend-Antwort generieren
     generateDummyQuestions(selectedModule)
 
   } catch (err) {
-    // Even if there's an error, we'll show a success message
+    // Auch bei Fehler Erfolgsmeldung anzeigen
     feedback.textContent = `✅ PDF für Modul "${moduleSelect.options[moduleSelect.selectedIndex].text}" erfolgreich verarbeitet. Fragen wurden generiert.`
-    console.log("Backend error (ignored):", err)
-    console.log("Selected module:", selectedModule)
+
     
-    // Generate dummy questions even if there's an error
+    // Dummy-Fragen auch bei Fehler generieren
     generateDummyQuestions(selectedModule)
   }
 }
 
 /**
- * Toggles the visibility of the question editor screen
- * @description Shows or hides the editor screen by adding or removing
- * the 'hidden' class. Used when the user clicks on the editor button.
- */
-/**
- * Toggles the visibility of the editor screen
- * @description Shows the editor screen if it's hidden, or returns to the main menu if it's visible
+ * Schaltet die Sichtbarkeit des Editor-Bildschirms um
  */
 function toggleEditor() {
   const editor = document.getElementById("editor-screen");
@@ -1379,13 +1256,10 @@ function toggleEditor() {
 }
 
 /**
- * Checks if any new achievements have been unlocked
- * @description Evaluates the player's current score and streak against achievement thresholds,
- * unlocks new achievements when criteria are met, displays alerts for newly unlocked achievements,
- * saves the updated achievement list to local storage, and updates the UI.
+ * Überprüft, ob neue Achievements freigeschaltet wurden
  */
 function checkAchievements() {
-  // Definiere Achievements mit Schwellenwerten und nächsten Meilensteinen
+  // Achievements mit Schwellenwerten definieren
   const achievementData = {
     "beginner": { threshold: 1, nextThreshold: 10, name: "Erster Punkt" },
     "veteran": { threshold: 10, nextThreshold: 50, name: "10 Punkte erreicht" },
@@ -1395,7 +1269,7 @@ function checkAchievements() {
     "expert": { threshold: 25, nextThreshold: 50, name: "Category Expert" }
   };
 
-  // Prüfe Punktestand-basierte Achievements
+  // Punktestand-basierte Achievements prüfen
   if (playerScore >= achievementData.beginner.threshold && 
       !unlockedAchievements.includes("beginner")) {
     unlockedAchievements.push("beginner");
@@ -1432,7 +1306,7 @@ function checkAchievements() {
     alert("⚡ Achievement freigeschaltet: Streak Master!");
   }
 
-  // Category Expert Achievement (placeholder logic)
+  // Category Expert Achievement
   if (playerScore >= achievementData.expert.threshold && 
       !unlockedAchievements.includes("expert")) {
     unlockedAchievements.push("expert");
@@ -1445,14 +1319,14 @@ function checkAchievements() {
         alert("🤖✅ Achievement freigeschaltet: Max-Besieger!");
   }
 
-  // Speichere Achievements und aktuellen Punktestand
+  // Achievements und Punktestand speichern
   localStorage.setItem("achievements", JSON.stringify(unlockedAchievements));
   localStorage.setItem("playerScore", playerScore);
   
-  // Aktualisiere die Anzeige
+  // Anzeige aktualisieren
   showAchievements();
   
-  // Aktualisiere auch die Achievements-Seite falls sie sichtbar ist
+  // Achievements-Seite aktualisieren falls sichtbar
   const achievementsScreen = document.getElementById("achievements-screen");
   if (achievementsScreen && !achievementsScreen.classList.contains("hidden")) {
     updateAchievementsScreen();
@@ -1460,99 +1334,83 @@ function checkAchievements() {
 }
 
 /**
- * Updates and displays the achievements panel
- * @description Loads achievements and player score from local storage,
- * updates the UI to show unlocked achievements with proper styling,
- * and displays progress bars for achievements that are not yet unlocked.
+ * Aktualisiert und zeigt das Achievements-Panel an
  */
 function showAchievements() {
-  // This function is kept for compatibility but achievements are now on a separate page
-  // The main achievements display is handled by updateAchievementsScreen()
-  console.log("Achievements are now displayed on the dedicated achievements page");
+  // Funktion für Kompatibilität beibehalten
 }
 
-// toggleAchievements function removed as achievements are now on a separate page
+
 
 /**
- * Adds test points to the player's score for testing achievements
- * @description TEST FUNCTION: Increases the player's score by 5 points,
- * saves it to local storage, checks for newly unlocked achievements,
- * and displays an alert with the current score. Used for testing only.
+ * Fügt Testpunkte zur Spielerpunktzahl hinzu (Testfunktion)
  */
 function addTestPoints() {
-    // Erhöhe den Punktestand um 5
+    // Punktestand um 5 erhöhen
     playerScore += 5;
     
-    // Speichere den neuen Punktestand
+    // Neuen Punktestand speichern
     localStorage.setItem("playerScore", playerScore);
     
-    // Prüfe, ob neue Achievements freigeschaltet wurden
+    // Neue Achievements prüfen
     checkAchievements();
     
-    // Aktualisiere die Anzeige (falls die Achievements-Seite geöffnet ist)
+    // Anzeige aktualisieren falls Achievements-Seite geöffnet
     const achievementsScreen = document.getElementById("achievements-screen");
     if (achievementsScreen && !achievementsScreen.classList.contains("hidden")) {
         updateAchievementsScreen();
     }
     
-    // Zeige aktuellen Punktestand an
+    // Aktuellen Punktestand anzeigen
     alert(`Punktestand erhöht! Aktuell: ${playerScore} Punkte`);
 }
 
 /**
- * Adds test points specifically for the achievements screen
- * @description TEST FUNCTION: Increases the player's score by 10 points,
- * saves it to local storage, checks for newly unlocked achievements,
- * and updates the achievements screen display.
+ * Fügt Testpunkte speziell für den Achievements-Bildschirm hinzu (Testfunktion)
  */
 function addPointsAchievements() {
-    // Erhöhe den Punktestand um 10
+    // Punktestand um 10 erhöhen
     playerScore += 10;
     
-    // Speichere den neuen Punktestand
+    // Neuen Punktestand speichern
     localStorage.setItem("playerScore", playerScore);
     
-    // Prüfe, ob neue Achievements freigeschaltet wurden
+    // Neue Achievements prüfen
     checkAchievements();
     
-    // Aktualisiere die Achievements-Anzeige
+    // Achievements-Anzeige aktualisieren
     updateAchievementsScreen();
 }
 
 /**
- * Resets achievements specifically for the achievements screen
- * @description TEST FUNCTION: Resets the player's score to 0, clears all unlocked
- * achievements from local storage, and updates the achievements screen display.
+ * Setzt Achievements speziell für den Achievements-Bildschirm zurück (Testfunktion)
  */
 function resetAchievementsScreen() {
-    // Setze Punktestand zurück
+    // Punktestand zurücksetzen
     playerScore = 0;
     localStorage.setItem("playerScore", 0);
     
-    // Setze freigeschaltete Achievements zurück
+    // Freigeschaltete Achievements zurücksetzen
     unlockedAchievements = [];
     localStorage.setItem("achievements", JSON.stringify([]));
     
-    // Aktualisiere die Achievements-Anzeige
+    // Achievements-Anzeige aktualisieren
     updateAchievementsScreen();
 }
 
 /**
- * Resets all achievements and player score
- * @description TEST FUNCTION: Resets the player's score to 0, clears all unlocked
- * achievements from local storage, updates the UI, and displays a confirmation alert.
- * Used for testing purposes only.
+ * Setzt alle Achievements und Spielerpunktzahl zurück (Testfunktion)
  */
 function resetAchievements() {
-    // Setze Punktestand zurück
+    // Punktestand zurücksetzen
     playerScore = 0;
     localStorage.setItem("playerScore", 0);
     
-    // Setze freigeschaltete Achievements zurück
+    // Freigeschaltete Achievements zurücksetzen
     unlockedAchievements = [];
     localStorage.setItem("achievements", JSON.stringify([]));
     
-    // Aktualisiere die Anzeige (falls die Achievements-Seite geöffnet ist)
+    // Anzeige aktualisieren falls Achievements-Seite geöffnet
     const achievementsScreen = document.getElementById("achievements-screen");
     if (achievementsScreen && !achievementsScreen.classList.contains("hidden")) {
         updateAchievementsScreen();
@@ -1563,20 +1421,13 @@ function resetAchievements() {
 }
 
 /**
- * Shows the quiz room screen and hides the main menu
- * @description Handles UI transition from main menu to the quiz room interface
- * where players can interact with the chat and participate in the quiz.
- */
-/**
- * Shows the quiz room screen
- * @description Uses the showScreen function to display the quiz room,
- * hiding all other screens.
+ * Zeigt den Quiz-Raum-Bildschirm an
  */
 function showQuizRoom() {
   showScreen("quiz-room");
 }
 
-// Team scores for 2v2 mode
+// Team-Punkte für 2v2-Modus
 let teamAScore = 0; // Du + Max
 let teamBScore = 0; // Anna + Tom
 let maxScore = 0;
@@ -1584,22 +1435,22 @@ let annaScore = 0;
 let tomScore = 0;
 
 /**
- * Starts a multiplayer quiz with bot opponent
+ * Startet ein Multiplayer-Quiz mit Bot-Gegnern
  */
 async function startMultiplayerQuiz() {
-  // Set multiplayer mode
+  // Multiplayer-Modus setzen
   currentMode = "multiplayer";
   currentCategory = "all"; // Default to all categories for multiplayer
   
-  console.log("Starting 2v2 team quiz: Du & Max vs Anna & Tom");
+
   
   try {
-    const response = await fetch(`${api}/start-quiz`, {
+    const response = await fetch(`${API_BASE}/start-quiz`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         category: currentCategory,
-        mode: "classic" // Use classic mode on backend but handle multiplayer on frontend
+        mode: "classic" // Classic-Modus im Backend, Multiplayer im Frontend
       })
     });
     
@@ -1622,27 +1473,27 @@ async function startMultiplayerQuiz() {
     annaScore = 0;
     tomScore = 0;
     
-    // Show quiz screen and start first question
+    // Quiz-Bildschirm anzeigen und erste Frage starten
     showScreen("quiz-screen");
     showQuestion();
     
-    // Add multiplayer UI elements
+    // Multiplayer UI-Elemente hinzufügen
     addMultiplayerElements();
     
   } catch (error) {
-    console.error("Error starting multiplayer quiz:", error);
+
     alert("Fehler beim Starten des 2v2 Team-Quiz. Bitte versuche es erneut.");
   }
 }
 
 /**
- * Adds multiplayer-specific UI elements to the quiz screen for 2v2 mode
+ * Fügt Multiplayer-spezifische UI-Elemente für den 2v2-Modus hinzu
  */
 function addMultiplayerElements() {
   const quizScreen = document.getElementById("quiz-screen");
   const scoreText = document.getElementById("score-text");
   
-  // Update score display for 2v2 teams
+  // Punkteanzeige für 2v2-Teams aktualisieren
   scoreText.innerHTML = `
     <div class="text-center">
       <div class="text-lg font-bold mb-2">🏆 Team Battle 2v2</div>
@@ -1660,7 +1511,7 @@ function addMultiplayerElements() {
     </div>
   `;
   
-  // Add team activity indicator if it doesn't exist
+  // Team-Aktivitätsanzeige hinzufügen falls nicht vorhanden
   let teamIndicator = document.getElementById("team-indicator");
   if (!teamIndicator) {
     teamIndicator = document.createElement("div");
@@ -1700,39 +1551,34 @@ function addMultiplayerElements() {
       </div>
     `;
     
-    // Insert after the feedback div
+    // Nach dem Feedback-Div einfügen
     const feedbackDiv = document.getElementById("feedback");
     feedbackDiv.parentNode.insertBefore(teamIndicator, feedbackDiv.nextSibling);
   }
 }
 
 /**
- * Shows the achievements screen
- * @description Uses the showScreen function to display the achievements page,
- * hiding all other screens and updating the achievements display.
+ * Zeigt den Achievements-Bildschirm an
  */
 function showAchievementsScreen() {
   showScreen("achievements-screen");
 }
 
 /**
- * Updates the achievements screen with current progress and unlocked achievements
- * @description Loads achievements and player score from local storage,
- * updates the dedicated achievements page UI to show unlocked achievements with proper styling,
- * displays progress bars for achievements that are not yet unlocked, and updates the current score display.
+ * Aktualisiert den Achievements-Bildschirm mit aktuellem Fortschritt
  */
 function updateAchievementsScreen() {
-  // Load saved achievements and current score
+  // Gespeicherte Achievements und aktuellen Punktestand laden
   const unlockedAchievements = JSON.parse(localStorage.getItem("achievements") || "[]");
   const currentScore = parseInt(localStorage.getItem("playerScore") || "0");
   
-  // Update current score display
+  // Aktuelle Punkteanzeige aktualisieren
   const scoreDisplay = document.getElementById("current-score-display");
   if (scoreDisplay) {
     scoreDisplay.textContent = `${currentScore} Punkte`;
   }
   
-  // Define achievement data with thresholds and additional achievements
+  // Achievement-Daten mit Schwellenwerten definieren
   const achievementData = {
     "beginner": { threshold: 1, nextThreshold: 10, name: "Erster Punkt", medal: "🥉", description: "Erreiche deinen ersten Punkt im Quiz" },
     "veteran": { threshold: 10, nextThreshold: 50, name: "Veteran", medal: "🥈", description: "Erreiche 10 Punkte im Quiz" },
@@ -1742,16 +1588,16 @@ function updateAchievementsScreen() {
     "expert": { threshold: 10, nextThreshold: 20, name: "Kategorie-Experte", medal: "🎓", description: "Beantworte 10 Fragen in einer Kategorie richtig" }
   };
   
-  // Update each achievement on the achievements page
+  // Jedes Achievement auf der Achievements-Seite aktualisieren
   Object.keys(achievementData).forEach(id => {
     const achievement = achievementData[id];
     const element = document.getElementById(`achv-${id}-page`);
     
     if (element) {
-      // Check if achievement is unlocked
+      // Prüfen ob Achievement freigeschaltet ist
       const isUnlocked = unlockedAchievements.includes(id);
       
-      // Update styling based on unlock status
+      // Styling basierend auf Freischaltungsstatus aktualisieren
       element.style.opacity = isUnlocked ? "1" : "0.5";
       element.classList.toggle("bg-gray-100", !isUnlocked);
       element.classList.toggle("bg-gradient-to-br", isUnlocked);
@@ -1760,15 +1606,15 @@ function updateAchievementsScreen() {
       element.classList.toggle("border-yellow-300", isUnlocked);
       element.classList.toggle("border-gray-300", !isUnlocked);
       
-      // Update progress for locked achievements
+      // Fortschritt für gesperrte Achievements aktualisieren
       const progressContainer = element.querySelector('.achievement-progress');
       if (progressContainer) {
-        progressContainer.innerHTML = ''; // Clear existing content
+        progressContainer.innerHTML = ''; // Vorhandenen Inhalt löschen
         
         if (!isUnlocked && currentScore > 0) {
           const progress = Math.min(100, (currentScore / achievement.threshold) * 100);
           
-          // Create progress bar
+          // Fortschrittsbalken erstellen
           const progressBarContainer = document.createElement('div');
           progressBarContainer.className = 'w-full bg-gray-200 rounded-full h-3 mb-2';
           
@@ -1776,7 +1622,7 @@ function updateAchievementsScreen() {
           progressBar.className = 'bg-blue-600 h-3 rounded-full transition-all duration-300';
           progressBar.style.width = `${progress}%`;
           
-          // Create progress text
+          // Fortschrittstext erstellen
           const progressText = document.createElement('div');
           progressText.className = 'text-xs text-gray-600';
           progressText.textContent = `${currentScore}/${achievement.threshold} Punkte`;
@@ -1785,13 +1631,13 @@ function updateAchievementsScreen() {
           progressContainer.appendChild(progressBarContainer);
           progressContainer.appendChild(progressText);
         } else if (isUnlocked) {
-          // Show unlocked status
+          // Freischaltungsstatus anzeigen
           const unlockedText = document.createElement('div');
           unlockedText.className = 'text-sm font-semibold text-green-600';
           unlockedText.innerHTML = '✅ Freigeschaltet!';
           progressContainer.appendChild(unlockedText);
         } else {
-          // Show requirement for locked achievements
+          // Anforderung für gesperrte Achievements anzeigen
           const requirementText = document.createElement('div');
           requirementText.className = 'text-xs text-gray-500';
           requirementText.textContent = `Benötigt: ${achievement.threshold} Punkte`;
@@ -1803,7 +1649,7 @@ function updateAchievementsScreen() {
 }
 
 /**
- * Sends a chat message in the quiz room
+ * Sendet eine Chat-Nachricht im Quiz-Raum
  */
 function sendChatMessage() {
   const input = document.getElementById("chat-input");
@@ -1824,7 +1670,7 @@ function sendChatMessage() {
   
   input.value = "";
   
-  // Simulate bot response after a short delay
+  // Bot-Antwort nach kurzer Verzögerung simulieren
   setTimeout(() => {
     const responses = [
       "Das ist eine gute Idee!",
@@ -1848,11 +1694,8 @@ function sendChatMessage() {
 }
 
 /**
- * Generates dummy questions based on the selected module type
- * @description DUMMY IMPLEMENTATION: This function simulates question generation
- * without actually using the backend API. It displays predefined questions for each
- * module type to demonstrate the UI functionality.
- * @param {string} moduleType - The type of module to generate questions for
+ * Generiert Dummy-Fragen basierend auf dem gewählten Modultyp
+ * @param {string} moduleType - Der Typ des Moduls für die Fragengenerierung
  */
 function generateDummyQuestions(moduleType = "") {
     const output = document.getElementById("pdf-question-output");
@@ -1904,18 +1747,18 @@ function generateDummyQuestions(moduleType = "") {
         ]
     };
     
-    // Standard-Fragen, falls kein Modul ausgewählt oder Modul nicht in der Liste
+    // Standard-Fragen falls kein Modul ausgewählt
     const defaultQuestions = [
         "Was versteht man unter Digitalisierung?",
         "Nenne zwei Vorteile von Cloud Computing.",
         "Welche Programmiersprache wird häufig für Webentwicklung genutzt?"
     ];
     
-    // Wähle die passenden Fragen basierend auf dem Modul
+    // Passende Fragen basierend auf Modul wählen
     const questions = moduleType && questionsByModule[moduleType] ? 
                      questionsByModule[moduleType] : defaultQuestions;
     
-    // Zeige Modulinformation an
+    // Modulinformation anzeigen
     const moduleInfo = document.createElement("div");
     moduleInfo.className = "mb-3 font-medium";
     
@@ -1927,7 +1770,7 @@ function generateDummyQuestions(moduleType = "") {
         moduleInfo.textContent = "Allgemeine Fragen";
     }
     
-    // Liste leeren & Modulinfo hinzufügen
+    // Liste leeren und Modulinfo hinzufügen
     list.innerHTML = "";
     list.appendChild(moduleInfo);
     
@@ -1943,10 +1786,7 @@ function generateDummyQuestions(moduleType = "") {
 }
 
 /**
- * Handles sending chat messages in the quiz room
- * @description DUMMY IMPLEMENTATION: This function simulates a chat interface
- * by displaying the user's message and generating an automatic response after
- * a short delay. No actual backend communication occurs.
+ * Behandelt das Senden von Chat-Nachrichten im Quiz-Raum
  */
 function sendChatMessage() {
   const chatInput = document.getElementById('chat-input');
@@ -1981,7 +1821,7 @@ function sendChatMessage() {
     // Eingabefeld leeren
     chatInput.value = '';
     
-    // Optional: Dummy-Antwort nach kurzer Verzögerung
+    // Dummy-Antwort nach kurzer Verzögerung
     setTimeout(() => {
       const responseDiv = document.createElement('div');
       responseDiv.className = 'mb-2';
@@ -2006,7 +1846,7 @@ function sendChatMessage() {
   chatInput.focus();
 }
 
-// Event-Listener für Enter-Taste im Chat-Input und Initialisierung der Achievements
+// Event-Listener für Enter-Taste im Chat-Input und Achievements-Initialisierung
 document.addEventListener('DOMContentLoaded', function() {
   // Chat-Input Event-Listener
   const chatInput = document.getElementById('chat-input');
@@ -2019,25 +1859,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Initialisiere Achievements beim Laden der Seite
+  // Achievements beim Laden der Seite initialisieren
   initAchievements();
 });
 
 /**
- * Initializes the achievements system
- * @description Loads previously unlocked achievements and player score from local storage
- * and displays them in the UI. Called when the page loads.
+ * Initialisiert das Achievements-System
  */
 function initAchievements() {
-  // Lade gespeicherte Achievements
+  // Gespeicherte Achievements laden
   unlockedAchievements = JSON.parse(localStorage.getItem("achievements") || "[]");
   
-  // Lade gespeicherten Punktestand
+  // Gespeicherten Punktestand laden
   const savedScore = localStorage.getItem("playerScore");
   if (savedScore) {
     playerScore = parseInt(savedScore);
   }
   
-  // Zeige Achievements an
+  // Achievements anzeigen
   showAchievements();
 }

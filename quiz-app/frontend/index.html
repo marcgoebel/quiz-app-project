@@ -7,14 +7,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gradient-to-tr from-blue-50 to-indigo-100 min-h-screen font-sans">
-  <!-- Application Header with Logo and Title -->
+  <!-- Anmelde-Bildschirm -->
+  
+  <!-- App-Header -->
 <div id="application-header" class="flex flex-col items-center mt-4">
   <img src="static/logo.png" alt="QuizConnect Logo" class="w-24 h-24 mb-2 rounded-full shadow-lg" />
   <h1 class="text-3xl font-bold text-gray-800">QuizConnect</h1>
   <p class="text-gray-500 text-sm">Lernen & Spielen – Deine Quizplattform</p>
 </div>
 
-  <!-- Login Screen - Initial view for user authentication -->
+  <!-- Anmelde-Bildschirm -->
   <div id="user-login-screen" class="flex flex-col items-center mt-8 mb-12">
     <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
       <h2 class="text-2xl font-bold mb-4">🚀 Willkommen beim Quiz!</h2>
@@ -26,9 +28,9 @@
   </div>
 
   <div id="main-menu" class="hidden flex flex-col items-center pt-10 px-4">
-    <!-- Main Layout with Cards and Secondary Actions -->
+    <!-- Hauptlayout mit Karten und Aktionen -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-0 w-full max-w-6xl mb-8">
-      <!-- Start Quiz Card -->
+      <!-- Quiz starten Karte -->
       <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
         <h3 class="text-xl font-bold mb-4 text-center">🎮 Quiz starten</h3>
         
@@ -59,7 +61,7 @@
         </div>
       </div>
       
-      <!-- Secondary Actions in the Middle -->
+      <!-- Sekundäre Aktionen -->
       <div class="grid grid-cols-2 gap-3">
         <button onclick="showHighscores()" class="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center h-32 w-full flex flex-col justify-center items-center">
           <div class="text-2xl mb-2">🏆</div>
@@ -82,7 +84,7 @@
         </button>
       </div>
       
-      <!-- Multiplayer Card -->
+      <!-- Multiplayer Karte -->
       <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all">
         <h3 class="text-xl font-bold mb-4 text-center">👥 Multiplayer</h3>
         
@@ -98,7 +100,7 @@
       </div>
     </div>
     
-    <!-- PDF Upload Section (Initially Hidden) -->
+    <!-- PDF Upload Bereich (initial versteckt) -->
     <div id="pdf-section" class="hidden w-full max-w-2xl">
       <div class="bg-white p-6 rounded-2xl shadow-lg">
         <h3 class="text-lg font-bold mb-4 text-center">📄 PDF Fragen generieren</h3>
@@ -135,7 +137,7 @@
           <div id="pdf-question-output" class="hidden bg-gray-50 p-4 rounded-xl">
             <h4 class="text-md font-semibold mb-3">Generierte Fragen:</h4>
             <ul id="dummy-questions" class="list-disc list-inside text-left space-y-1">
-              <!-- Fragen werden hier angezeigt -->
+              <!-- Fragen hier angezeigt -->
             </ul>
           </div>
           
@@ -181,11 +183,11 @@
         </ul>
       </div>
       
-      <!-- Chat Box -->
+      <!-- Chat-Box -->
       <div class="w-full bg-gray-50 rounded-lg p-4 mb-6">
         <h4 class="font-bold text-gray-700 mb-3 text-left">💬 Team-Chat</h4>
         
-        <!-- Chat History -->
+        <!-- Chat-Verlauf -->
         <div id="chat-history" class="bg-white p-3 rounded-md mb-3 h-48 overflow-y-auto text-left">
           <div class="mb-2">
             <span class="font-semibold text-blue-600">🧑‍🎓 Spieler 1:</span>
@@ -205,7 +207,7 @@
           </div>
         </div>
         
-        <!-- Chat Input -->
+        <!-- Chat-Eingabe -->
         <div class="flex">
           <input type="text" id="chat-input" placeholder="Deine Nachricht..." 
                  class="flex-1 px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400" 
@@ -245,7 +247,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Highscore-Einträge werden hier dynamisch eingefügt -->
+            <!-- Highscore-Einträge dynamisch eingefügt -->
           </tbody>
         </table>
       </div>
@@ -260,15 +262,15 @@
     <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl text-center">
       <h2 class="text-2xl font-bold mb-6">🏆 Deine Achievements</h2>
       
-      <!-- Current Score Display -->
+      <!-- Aktueller Punktestand -->
       <div class="mb-8 p-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl">
         <h3 class="text-lg font-semibold mb-2">📊 Aktueller Punktestand</h3>
         <p id="current-score-display" class="text-3xl font-bold text-blue-600">0 Punkte</p>
       </div>
       
-      <!-- Achievements Grid -->
+      <!-- Achievements Raster -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <!-- Beginner Achievement -->
+        <!-- Anfänger Achievement -->
         <div id="achv-beginner-page" class="p-6 border-2 rounded-xl shadow-lg bg-gray-100 opacity-50 transition-all duration-300">
           <div class="flex items-center justify-center mb-4">
             <span class="text-5xl">🥉</span>
@@ -276,7 +278,7 @@
           <h4 class="text-lg font-bold mb-2">Erster Punkt</h4>
           <p class="text-sm text-gray-600 mb-3">Erreiche deinen ersten Punkt im Quiz</p>
           <div class="achievement-progress">
-            <!-- Progress will be added dynamically -->
+            <!-- Fortschritt dynamisch hinzugefügt -->
           </div>
         </div>
         
@@ -328,7 +330,7 @@
           </div>
         </div>
         
-        <!-- Category Expert Achievement -->
+        <!-- Kategorie-Experte Achievement -->
         <div id="achv-expert-page" class="p-6 border-2 rounded-xl shadow-lg bg-gray-100 opacity-50 transition-all duration-300">
           <div class="flex items-center justify-center mb-4">
             <span class="text-5xl">🎓</span>
@@ -341,7 +343,7 @@
         </div>
       </div>
       
-      <!-- Test Buttons -->
+      <!-- Test-Buttons -->
       <div class="mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
         <h4 class="font-semibold mb-3 text-yellow-800">🧪 Test-Funktionen</h4>
         <div class="flex gap-2 justify-center flex-wrap">
@@ -354,7 +356,7 @@
         </div>
       </div>
       
-      <!-- Back Button -->
+      <!-- Zurück-Button -->
       <button onclick="showScreen('main-menu')" class="bg-indigo-500 text-white px-6 py-3 rounded-xl hover:bg-indigo-600 transition-all font-semibold">
         ← Zurück zum Hauptmenü
       </button>
@@ -363,10 +365,10 @@
 
   <script>
     /**
-     * Handles user login process
-     * - Validates username input
-     * - Shows error message if username is empty
-     * - Transitions from login screen to main menu using showScreen function
+     * Benutzer-Anmeldung
+     * - Validiert Benutzername
+     * - Zeigt Fehlermeldung bei leerem Benutzername
+     * - Wechselt vom Anmelde- zum Hauptmenü
      */
     function login() {
       const username = document.getElementById("username-input").value.trim();
@@ -377,9 +379,9 @@
       showScreen("main-menu");
     }
   </script>
-  <!-- Include the quiz screens -->
+  <!-- Quiz-Bildschirme einbinden -->
   <div id="quiz-screens-container">
-    <!-- Quiz Screen - Where questions are displayed and answered -->
+    <!-- Quiz-Bildschirm - Fragen anzeigen und beantworten -->
     <div id="quiz-screen" class="hidden flex flex-col items-center mt-8 mb-12">
       <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl">
         <div class="flex justify-between items-center mb-4">
@@ -387,7 +389,7 @@
           <p id="score-text" class="font-medium">Du: 0 | Max: 0</p>
         </div>
         
-        <!-- Progress Bar -->
+        <!-- Fortschrittsbalken -->
         <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
           <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
         </div>
@@ -395,7 +397,7 @@
         <h3 id="question-text" class="text-xl mb-6">Frage wird geladen...</h3>
         
         <div id="options" class="mb-6">
-          <!-- Answer options will be inserted here dynamically -->
+          <!-- Antwortoptionen dynamisch eingefügt -->
         </div>
         
         <div id="feedback" class="mb-4 text-center font-medium"></div>
@@ -408,7 +410,7 @@
       </div>
     </div>
 
-    <!-- Result Screen - Displayed after quiz completion -->
+    <!-- Ergebnis-Bildschirm - Nach Quiz-Abschluss angezeigt -->
     <div id="result-screen" class="hidden flex flex-col items-center mt-8 mb-12">
       <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
         <h2 class="text-2xl font-bold mb-4">🎉 Quiz beendet!</h2>
@@ -424,12 +426,12 @@
       </div>
     </div>
 
-    <!-- Editor Screen - For creating new questions -->
+    <!-- Editor-Bildschirm - Neue Fragen erstellen -->
     <div id="editor-screen" class="hidden flex flex-col items-center mt-8 mb-12">
       <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl">
         <h2 class="text-2xl font-bold mb-6">🛠️ Frageneditor</h2>
         
-        <!-- Tab Navigation -->
+        <!-- Tab-Navigation -->
         <div class="flex mb-6 border-b">
           <button id="create-tab" onclick="switchEditorTab('create')" class="px-4 py-2 font-medium border-b-2 border-blue-500 text-blue-600">
             ➕ Neue Frage erstellen
@@ -439,7 +441,7 @@
           </button>
         </div>
         
-        <!-- Create Question Section -->
+        <!-- Frage erstellen Bereich -->
         <div id="create-section">
         
         <div class="mb-4">
@@ -489,7 +491,7 @@
         <p id="editor-feedback" class="mt-4 text-center"></p>
         </div>
         
-        <!-- Manage Questions Section -->
+        <!-- Fragen verwalten Bereich -->
         <div id="manage-section" class="hidden">
           <div class="mb-4">
             <label class="block mb-2 font-medium">Filter nach Kategorie</label>
@@ -499,13 +501,13 @@
           </div>
           
           <div id="questions-list" class="space-y-4 max-h-96 overflow-y-auto">
-            <!-- Questions will be loaded here -->
+            <!-- Fragen hier geladen -->
           </div>
           
           <div id="manage-feedback" class="mt-4 text-center"></div>
         </div>
         
-        <!-- Edit Question Modal -->
+        <!-- Frage bearbeiten Modal -->
         <div id="edit-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-2xl mx-4">
             <h3 class="text-xl font-bold mb-4">✏️ Frage bearbeiten</h3>
@@ -518,21 +520,21 @@
             <div class="mb-4">
               <label class="block mb-2 font-medium">Antwortmöglichkeiten</label>
               <div id="edit-options-container">
-                <!-- Options will be loaded here -->
+                <!-- Optionen hier geladen -->
               </div>
             </div>
             
             <div class="mb-4">
               <label class="block mb-2 font-medium">Richtige Antwort</label>
               <select id="edit-correct" class="w-full p-2 border rounded">
-                <!-- Options will be loaded here -->
+                <!-- Optionen hier geladen -->
               </select>
             </div>
             
             <div class="mb-6">
               <label class="block mb-2 font-medium">Kategorie</label>
               <select id="edit-category" class="w-full p-2 border rounded">
-                <!-- Categories will be loaded here -->
+                <!-- Kategorien hier geladen -->
               </select>
             </div>
             
