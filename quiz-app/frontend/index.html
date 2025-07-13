@@ -363,22 +363,7 @@
     </div>
   </div>
 
-  <script>
-    /**
-     * Benutzer-Anmeldung
-     * - Validiert Benutzername
-     * - Zeigt Fehlermeldung bei leerem Benutzername
-     * - Wechselt vom Anmelde- zum Hauptmenü
-     */
-    function login() {
-      const username = document.getElementById("username-input").value.trim();
-      if (!username) {
-        document.getElementById("username-error-message").classList.remove("hidden");
-        return;
-      }
-      showScreen("main-menu");
-    }
-  </script>
+  <!-- Login-Funktion wird in script.js definiert -->
   <!-- Quiz-Bildschirme einbinden -->
   <div id="quiz-screens-container">
     <!-- Quiz-Bildschirm - Fragen anzeigen und beantworten -->
