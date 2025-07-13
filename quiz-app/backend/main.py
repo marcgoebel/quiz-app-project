@@ -12,7 +12,11 @@ app = FastAPI()
 # CORS für Frontend-Verbindung
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://quiz-app-project-0k81.onrender.com"],
+    allow_origins=[
+        "https://quiz-app-project-0k81.onrender.com",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
