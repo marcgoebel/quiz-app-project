@@ -1,0 +1,200 @@
+[
+  {
+    "id": "q1",
+    "question": "Was ist 2 + 2?",
+    "options": [
+      "3",
+      "4",
+      "5"
+    ],
+    "correct": 1,
+    "category": "math"
+  },
+  {
+    "id": "q2",
+    "question": "Was ist die Hauptstadt von Frankreich?",
+    "options": [
+      "Berlin",
+      "Madrid",
+      "Paris"
+    ],
+    "correct": 2,
+    "category": "history"
+  },
+  {
+    "id": "q3",
+    "question": "Welche Sprache sprechen die meisten Menschen?",
+    "options": [
+      "Deutsch",
+      "Englisch",
+      "Mandarin"
+    ],
+    "correct": 2,
+    "category": "logic"
+  },
+  {
+    "id": "q4",
+    "question": "Was ist 15 × 3?",
+    "options": [
+      "45",
+      "35",
+      "55"
+    ],
+    "correct": 0,
+    "category": "math"
+  },
+  {
+    "id": "q5",
+    "question": "Was ist 144 ÷ 12?",
+    "options": [
+      "11",
+      "12",
+      "13"
+    ],
+    "correct": 1,
+    "category": "math"
+  },
+  {
+    "id": "q6",
+    "question": "Was ist die Quadratwurzel von 64?",
+    "options": [
+      "6",
+      "7",
+      "8"
+    ],
+    "correct": 2,
+    "category": "math"
+  },
+  {
+    "id": "q7",
+    "question": "Was ist 25% von 200?",
+    "options": [
+      "40",
+      "50",
+      "60"
+    ],
+    "correct": 1,
+    "category": "math"
+  },
+  {
+    "id": "q8",
+    "question": "Was ist 7²?",
+    "options": [
+      "42",
+      "49",
+      "56"
+    ],
+    "correct": 1,
+    "category": "math"
+  },
+  {
+    "id": "q9",
+    "question": "In welchem Jahr fiel die Berliner Mauer?",
+    "options": [
+      "1987",
+      "1989",
+      "1991"
+    ],
+    "correct": 1,
+    "category": "history"
+  },
+  {
+    "id": "q10",
+    "question": "Wer war der erste Kaiser des Römischen Reiches?",
+    "options": [
+      "Julius Caesar",
+      "Augustus",
+      "Nero"
+    ],
+    "correct": 1,
+    "category": "history"
+  },
+  {
+    "id": "q11",
+    "question": "In welchem Jahr begann der Erste Weltkrieg?",
+    "options": [
+      "1912",
+      "1914",
+      "1916"
+    ],
+    "correct": 1,
+    "category": "history"
+  },
+  {
+    "id": "q12",
+    "question": "Wer entdeckte Amerika?",
+    "options": [
+      "Vasco da Gama",
+      "Christopher Columbus",
+      "Ferdinand Magellan"
+    ],
+    "correct": 1,
+    "category": "history"
+  },
+  {
+    "id": "q13",
+    "question": "In welchem Jahr wurde die DDR gegründet?",
+    "options": [
+      "1947",
+      "1949",
+      "1951"
+    ],
+    "correct": 1,
+    "category": "history"
+  },
+  {
+    "id": "q14",
+    "question": "Welches Tier ist NICHT ein Säugetier?",
+    "options": [
+      "Wal",
+      "Fledermaus",
+      "Pinguin"
+    ],
+    "correct": 2,
+    "category": "logic"
+  },
+  {
+    "id": "q15",
+    "question": "Was kommt als nächstes in der Reihe: 2, 4, 8, 16, ...?",
+    "options": [
+      "24",
+      "32",
+      "20"
+    ],
+    "correct": 1,
+    "category": "logic"
+  },
+  {
+    "id": "q16",
+    "question": "Wenn alle Rosen Blumen sind und alle Blumen Pflanzen sind, dann sind alle Rosen...?",
+    "options": [
+      "rot",
+      "Pflanzen",
+      "schön"
+    ],
+    "correct": 1,
+    "category": "logic"
+  },
+  {
+    "id": "q17",
+    "question": "Welcher Tag kommt zwei Tage nach Montag?",
+    "options": [
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag"
+    ],
+    "correct": 1,
+    "category": "logic"
+  },
+  {
+    "id": "q18",
+    "question": "Was ist das Gegenteil von 'groß'?",
+    "options": [
+      "klein",
+      "riesig",
+      "mittel"
+    ],
+    "correct": 0,
+    "category": "logic"
+  }
+]

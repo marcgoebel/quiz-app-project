@@ -1,0 +1,117 @@
+/* Globale Zentrierung und Ausrichtung */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* App-Header - konsistente Zentrierung */
+#application-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+#application-header img {
+  margin: 0 auto;
+}
+
+/* Alle Hauptbildschirm-Container - konsistente Zentrierung */
+#user-login-screen,
+#main-menu,
+#quiz-room,
+#highscore-screen,
+#achievements-screen,
+#quiz-screen,
+#result-screen,
+#editor-screen {
+  width: 100%;
+  max-width: 100vw;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Bildschirme sichtbar wenn nicht versteckt */
+#user-login-screen:not(.hidden),
+#main-menu:not(.hidden),
+#quiz-room:not(.hidden),
+#highscore-screen:not(.hidden),
+#achievements-screen:not(.hidden),
+#quiz-screen:not(.hidden),
+#result-screen:not(.hidden),
+#editor-screen:not(.hidden) {
+  display: flex;
+}
+
+/* Content-Container - konsistente max-width und Zentrierung */
+#user-login-screen > div,
+#main-menu > div,
+#quiz-room > div,
+#highscore-screen > div,
+#achievements-screen > div,
+#quiz-screen > div,
+#result-screen > div,
+#editor-screen > div {
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Spezifische Anpassungen für bessere Ausrichtung */
+#user-login-screen {
+  margin-top: 2rem;
+}
+
+#main-header img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+/* Tabellen zentriert */
+#highscore-table {
+  margin: 0 auto;
+}
+
+/* Achievement-Raster Zentrierung */
+.grid {
+  justify-items: center;
+}
+
+/* Chat-Verlauf Ausrichtung */
+#chat-history {
+  text-align: left;
+}
+
+/* Button-Gruppen Zentrierung */
+.flex.gap-2,
+.flex.gap-4 {
+  justify-content: center;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+  #user-login-screen,
+  #main-menu,
+  #quiz-room,
+  #highscore-screen,
+  #achievements-screen,
+  #quiz-screen,
+  #result-screen,
+  #editor-screen {
+    padding: 0 0.5rem;
+  }
+  
+  #application-header {
+    margin-bottom: 1rem;
+  }
+  
+  #application-header h1 {
+    font-size: 1.5rem;
+  }
+}
