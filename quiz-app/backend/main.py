@@ -15,6 +15,7 @@ app.add_middleware(
     allow_origins=[
         "https://quiz-app-project-0k81.onrender.com",
         "https://quizconnect.onrender.com",
+        "https://marcgoebel.github.io",
         "http://localhost:8000",
         "http://127.0.0.1:8000"
     ],
