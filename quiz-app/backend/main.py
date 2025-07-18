@@ -16,6 +16,7 @@ app.add_middleware(
         "https://quiz-app-project-0k81.onrender.com",
         "https://quizconnect.onrender.com",
         "https://marcgoebel.github.io",
+        "https://marcgoebel.github.io/quiz-app-project",
         "http://localhost:8000",
         "http://127.0.0.1:8000"
     ],
