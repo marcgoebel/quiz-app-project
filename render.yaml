@@ -4,8 +4,9 @@ services:
     env: python
     region: frankfurt
     plan: free
-    buildCommand: pip install -r quiz-app/backend/requirements.txt
-    startCommand: cd quiz-app/backend && python main.py
+    rootDir: quiz-app/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
     envVars:
       - key: PORT
         value: 10000
