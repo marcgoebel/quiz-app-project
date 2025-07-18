@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizConnect - Lokale Version</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .local-banner {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="local-banner">
+            🏠 LOKALE VERSION - Funktioniert ohne Internet-Backend!
+        </div>
+        
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="login-container">
+                <div class="logo">
+                    <div class="logo-img">🎯</div>
+                    <h1>QuizConnect</h1>
+                    <p class="subtitle">Lokale Quiz-Anwendung</p>
+                </div>
+                
+                <div class="login-form">
+                    <h2>🎯 Willkommen beim Quiz!</h2>
+                    
+                    <div class="form-group">
+                        <label for="username">Benutzername:</label>
+                        <input type="text" id="username" placeholder="testuser" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Passwort:</label>
+                        <input type="password" id="password" placeholder="12345" required>
+                    </div>
+                    
+                    <button id="login-btn" class="btn btn-primary">Los geht's! 🚀</button>
+                    
+                    <div id="error-message" class="error-message"></div>
+                    
+                    <div class="login-info">
+                        <p><strong>Standard-Login:</strong></p>
+                        <p>Benutzername: <code>testuser</code></p>
+                        <p>Passwort: <code>12345</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="main-menu" class="screen">
+            <div class="menu-header">
+                <h1>🎯 Quiz-Hauptmenü</h1>
+                <button onclick="logout()" class="btn btn-secondary">Abmelden</button>
+            </div>
+            
+            <div class="quiz-options">
+                <div class="option-group">
+                    <h3>📚 Kategorie wählen:</h3>
+                    <select id="category-select" class="form-control">
+                        <option value="">Alle Kategorien</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <h3>🎮 Spielmodus:</h3>
+                    <select id="mode-select" class="form-control">
+                        <option value="classic">Klassisch</option>
+                        <option value="timed">Zeitlimit</option>
+                        <option value="survival">Survival</option>
+                    </select>
+                </div>
+                
+                <div class="menu-buttons">
+                    <button id="start-quiz-btn" class="btn btn-primary btn-large">🚀 Quiz starten!</button>
+                    <button id="highscores-btn" class="btn btn-secondary">🏆 Bestenliste</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-header">
+                <div id="question-counter" class="question-counter">Frage 1 von 10</div>
+                <button onclick="backToMenu()" class="btn btn-secondary">Zurück</button>
+            </div>
+            
+            <div class="question-container">
+                <h2 id="question-text" class="question-text">Frage wird geladen...</h2>
+                <div id="options-container" class="options-container">
+                    <!-- Optionen werden dynamisch eingefügt -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-container">
+                <h1>🎉 Quiz beendet!</h1>
+                
+                <div class="score-display">
+                    <h2>Dein Ergebnis:</h2>
+                    <div id="final-score" class="final-score">0 von 10 (0%)</div>
+                </div>
+                
+                <div class="results-buttons">
+                    <button id="new-quiz-btn" class="btn btn-primary">🔄 Neues Quiz</button>
+                    <button onclick="showHighscores()" class="btn btn-secondary">🏆 Bestenliste</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highscores Screen -->
+        <div id="highscores-screen" class="screen">
+            <div class="highscores-container">
+                <h1>🏆 Bestenliste</h1>
+                
+                <div class="table-container">
+                    <table id="highscores-table" class="highscores-table">
+                        <thead>
+                            <tr>
+                                <th>Rang</th>
+                                <th>Spieler</th>
+                                <th>Punkte</th>
+                                <th>Prozent</th>
+                                <th>Kategorie</th>
+                                <th>Datum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Highscores werden dynamisch eingefügt -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <button class="btn btn-primary back-btn">🔙 Zurück</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

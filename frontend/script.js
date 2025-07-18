@@ -159,7 +159,7 @@ function initializeApp() {
   }
 }
 
-const API_BASE = "http://localhost:8001"
+const API_BASE = "https://quiz-app-project-0k81.onrender.com"
 
 /**
  * Schaltet die Sichtbarkeit des PDF-Upload-Bereichs um
