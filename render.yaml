@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: quiz-app-backend
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install -r quiz-app/backend/requirements.txt
+    startCommand: cd quiz-app/backend && python main.py
+    envVars:
+      - key: PORT
+        value: 10000
