@@ -1,7 +1,9 @@
 import os
 import uuid
 import json
-from fastapi import APIRouter, UploadFile, File, HTTPException
+import base64
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from database import load_json
 from database import questions
 
@@ -52,23 +54,33 @@ def save_questions(questions):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(existing, f, indent=2, ensure_ascii=False)
 
+class PDFUpload(BaseModel):
+    filename: str
+    content: str  # Base64 encoded PDF content
+
 @router.post("/upload-pdf")
-def upload_pdf(file: UploadFile = File(...)):
+def upload_pdf(upload: PDFUpload):
     global questions  # Muss ganz nach oben!
 
-    if not file.filename.endswith(".pdf"):
+    if not upload.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Bitte nur PDF-Dateien hochladen.")
+
+    try:
+        # Decode base64 content
+        pdf_content = base64.b64decode(upload.content)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Ungültiger PDF-Inhalt.")
 
     pdf_id = uuid.uuid4().hex
     save_path = os.path.join(UPLOAD_FOLDER, f"{pdf_id}.pdf")
     with open(save_path, "wb") as f:
-        f.write(file.file.read())
+        f.write(pdf_content)
 
     text = extract_text_from_pdf(save_path)
-    questions = generate_questions_from_text(text)
-    save_questions(questions)
+    new_questions = generate_questions_from_text(text)
+    save_questions(new_questions)
 
     questions.clear()
     questions.extend(load_json("questions.json"))
 
-    return {"msg": f"{len(questions)} Fragen generiert und gespeichert.", "questions": questions}
+    return {"msg": f"{len(new_questions)} Fragen generiert und gespeichert.", "questions": questions}
