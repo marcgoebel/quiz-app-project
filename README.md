@@ -44,10 +44,27 @@ Eine interaktive Quiz-Anwendung mit FastAPI Backend und HTML/JavaScript Frontend
 
 ## Deployment auf Render
 
-Die App ist automatisch für Render konfiguriert:
+Die App ist automatisch für Render konfiguriert über die `render.yaml` Datei:
 
-- **Backend:** https://quiz-app-project-0k81.onrender.com
-- **Frontend:** https://quizconnect.onrender.com
+### Automatisches Deployment
+1. **Repository zu Render verbinden**
+2. **Beide Services werden automatisch deployed:**
+   - **Backend Service:** `quiz-app-backend` (Python/FastAPI)
+   - **Frontend Service:** `quiz-app-frontend` (Static Site)
+
+### URLs nach Deployment
+- **Backend:** https://quiz-app-backend-[random].onrender.com
+- **Frontend:** https://quiz-app-frontend-[random].onrender.com
+
+### Manuelle Schritte nach Deployment
+1. **Backend URL notieren** aus dem Render Dashboard
+2. **Frontend script.js aktualisieren** mit der korrekten Backend URL
+3. **Redeploy** des Frontend Services
+
+### Render.yaml Konfiguration
+Die `render.yaml` definiert beide Services:
+- Backend: Python-basierter Web Service
+- Frontend: Static Site mit SPA-Routing
 
 ### Automatisches Deployment
 Änderungen werden automatisch deployed, wenn sie auf den `main` Branch gepusht werden.
